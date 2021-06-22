@@ -9,8 +9,8 @@ my_project <- readline(prompt="Enter project or tool name to search: ")
 ##Check number of hits
 project_hits <- europepmc::epmc_hits(query=my_project)
 
-if (project_hits > 5000){
-  message("There are ", project_hits, " hits. This will take a while to process.")
+if (project_hits > 10000){
+  message("There are ", project_hits, " hits. This may take a while to process.")
   proceed <- readline(prompt="Are you sure you want to proceed? (Y/N): ")
   if (tolower(proceed) != 'y')
     invokeRestart("abort")

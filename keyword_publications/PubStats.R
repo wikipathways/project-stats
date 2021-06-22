@@ -7,17 +7,20 @@ library(tidyr)
 my_project <- readline(prompt="Enter project or tool name to search: ")
 
 ##Check number of hits
-project_hits <- europepmc::epmc_hits(query=my_project)
+approx_num_records <- europepmc::epmc_hits(query=my_project)
+num_records_found <-europepmc::epmc_search(query=my_project, limit=1)
 
-if (project_hits > 10000){
-  message("There are ", project_hits, " hits. This may take a while to process.")
-  proceed <- readline(prompt="Are you sure you want to proceed? (Y/N): ")
-  if (tolower(proceed) != 'y')
-    invokeRestart("abort")
+threshold <- 5000
+if (approx_num_records > threshold){
+  message("There are over ",threshold," hits. This may take a while to process.")
+
+num_records <- as.integer(readline(prompt="Enter the number of records to be returned: "))
+} else {
+  num_records <- threshold
 }
 
-##Update query with limit based on how many are available. Note this will be very slow.
-project_search <- europepmc::epmc_search(query=my_project)
+##Update query with limit based on how many are available. Note this may be very slow.
+project_search <- europepmc::epmc_search(query=my_project, limit=num_records)
 
 ##Make subsets
 stats <- project_search %>%
